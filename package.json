@@ -1,0 +1,17 @@
+{
+  "name": "kanskje",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "christianhg/kanskje",
+  "author": {
+    "name": "Christian Grøngaard",
+    "email": "christianhg@gmail.com"
+  },
+  "scripts": {
+    "test": "standard && ava"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0",
+    "standard": "^8.6.0"
+  }
+}
