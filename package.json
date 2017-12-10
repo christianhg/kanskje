@@ -4,14 +4,31 @@
   "license": "MIT",
   "repository": "christianhg/kanskje",
   "author": {
-    "name": "Christian Grøngaard",
+    "name": "Christian Hamburger Grøngaard",
     "email": "christianhg@gmail.com"
   },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "standard && ava"
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "dist": "trash dist && npm run lint && npm run prettier-production && npm run test && tsc",
+    "postdist": "trash ./dist/index.test.{d.ts,js,js.map}",
+    "lint": "tslint --fix ./*.ts",
+    "prettier": "prettier --config ./.prettierrc --write ./*.ts",
+    "prettier-production": "prettier --config ./.prettierrc --list-different ./*.ts",
+    "test": "tsc && nyc ava"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
-    "standard": "^8.6.0"
+    "ava": "^0.24.0",
+    "codecov": "^3.0.0",
+    "nyc": "^11.3.0",
+    "prettier": "^1.9.1",
+    "trash-cli": "^1.4.0",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.6.0",
+    "typescript": "^2.6.2"
   }
 }
