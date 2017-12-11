@@ -22,7 +22,7 @@ export interface Maybe<A> extends Chain<A>, Foldable<A>, Functor<A> {
   unsafeGet(): A | void
 }
 
-export class Just<A> implements Maybe<A> {
+class Just<A> implements Maybe<A> {
   /** @internal */
   static of<A>(value: A) {
     return new Just(value)
@@ -77,7 +77,7 @@ export class Just<A> implements Maybe<A> {
   }
 }
 
-export class Nothing<A> implements Maybe<A> {
+class Nothing<A> implements Maybe<A> {
   chain<B>(f: (a: A) => Maybe<B>) {
     return new Nothing<B>()
   }
@@ -125,6 +125,6 @@ export function fromNullable<A>(a: Nullable<A>): Maybe<A> {
   return a !== undefined && a !== null ? new Just(a) : new Nothing<A>()
 }
 
-export function of<A>(value: A) {
+export function of<A>(value: A): Maybe<A> {
   return new Just(value)
 }
