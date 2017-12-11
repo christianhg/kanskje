@@ -121,6 +121,23 @@ class Nothing<A> implements Maybe<A> {
 
 export type Nullable<A> = A | undefined | null
 
+export function all<A>(maybes: Maybe<A>[]): Maybe<A[]>
+export function all<A, B>(maybes: [Maybe<A>, Maybe<B>]): Maybe<[A, B]>
+export function all<A, B, C>(
+  maybes: [Maybe<A>, Maybe<B>, Maybe<C>]
+): Maybe<[A, B, C]>
+export function all<A, B, C, D>(
+  maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>]
+): Maybe<[A, B, C, D]>
+export function all<A, B, C, D, E>(
+  maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>, Maybe<E>]
+): Maybe<[A, B, C, D, E]>
+export function all(maybes: Maybe<any>[]): Maybe<any[]> {
+  return maybes.every(maybe => maybe.isJust())
+    ? of(maybes.map(maybe => maybe.unsafeGet()))
+    : new Nothing<any>()
+}
+
 export function fromNullable<A>(a: Nullable<A>): Maybe<A> {
   return a !== undefined && a !== null ? new Just(a) : new Nothing<A>()
 }

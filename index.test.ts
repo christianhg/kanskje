@@ -50,6 +50,41 @@ const persons: Person[] = [
   admin
 ]
 
+test('all', t => {
+  t.true(Maybe.all([Maybe.of('foo'), Maybe.of('bar')]).isJust())
+  t.true(Maybe.all([Maybe.of(42), Maybe.of('fizzbuzz')]).isJust())
+  t.true(Maybe.all([Maybe.of(true), Maybe.fromNullable(undefined)]).isNothing())
+  t.deepEqual(Maybe.all([Maybe.of('foo'), Maybe.of('bar')]).unsafeGet(), [
+    'foo',
+    'bar'
+  ])
+  t.deepEqual(Maybe.all([Maybe.of(42), Maybe.of('fizzbuzz')]).unsafeGet(), [
+    42,
+    'fizzbuzz'
+  ])
+  t.true(
+    Maybe.all([
+      Maybe.fromNullable(persons[0]),
+      Maybe.fromNullable(persons[1]),
+      Maybe.fromNullable(persons[2]),
+      Maybe.fromNullable(persons[3])
+    ])
+      .map(persons => persons.map(unsafeProp('name')))
+      .isNothing()
+  )
+  t.deepEqual(
+    Maybe.all([
+      Maybe.fromNullable(persons[0]),
+      Maybe.fromNullable(persons[1]),
+      Maybe.fromNullable(persons[2])
+    ]).fold(
+      persons => persons.map(unsafeProp('name')),
+      () => ['random', 'names', 'list']
+    ),
+    ['Alice', 'Bob', 'Carl']
+  )
+})
+
 test('chain', t => {
   t.is(
     Maybe.fromNullable(persons[0])
