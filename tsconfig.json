@@ -6,7 +6,6 @@
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "stripInternal": true,
     "target": "es2015"
   }
 }

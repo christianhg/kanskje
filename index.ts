@@ -23,10 +23,8 @@ export interface Maybe<A> extends Chain<A>, Foldable<A>, Functor<A> {
 }
 
 class Just<A> implements Maybe<A> {
-  /** @internal */
   private readonly a: A
 
-  /** @internal */
   constructor(a: A) {
     this.a = a
   }
