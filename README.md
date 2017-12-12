@@ -8,7 +8,7 @@
 [![dependencies status](https://david-dm.org/christianhg/kanskje.svg)](https://david-dm.org/christianhg/kanskje)
 [![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
 
-### Usage
+## Usage
 
 The Maybe represents a wrapper around any value - most commonly values that might be nullable. The wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally omitting the need for conditionals like `if`s. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
 
@@ -46,17 +46,19 @@ Maybe.fromNullable(persons[3])
 // => Nothing()
 ```
 
-### API
+## API
 
-## `.of(..)`
+### Core API
 
-* **Arguments:**
+#### `of()`
 
-  * `a: A`
+* **Signature:**
 
-* **Returns:** `Maybe<A>`
+  ```ts
+  of<A>(a: A): Maybe<A>
+  ```
 
-* **Examples:**
+* **Example:**
 
   ```js
   Maybe.of('foo')
@@ -68,15 +70,15 @@ Maybe.fromNullable(persons[3])
   // => Just(undefined)
   ```
 
-## `.fromNullable(..)`
+#### `fromNullable()`
 
-* **Arguments:**
+* **Signature:**
 
-  * `a: A`
+  ```ts
+  fromNullable<A>(a: Nullable<A>): Maybe<A>
+  ```
 
-* **Returns:** `Maybe<A>`
-
-* **Examples:**
+* **Example:**
 
   ```js
   Maybe.fromNullable('foo')
@@ -88,15 +90,27 @@ Maybe.fromNullable(persons[3])
   // => Nothing()
   ```
 
-## `.all(..)`
+#### `.all()`
 
-* **Arguments:**
+* **Signature:**
 
-  * `mas: Maybe<A>[]`
+  ```ts
+  .all<A>(maybes: Maybe<A>[]): Maybe<A[]>
 
-* **Returns:** `Maybe<A[]>`
+  .all<A, B>(maybes: [Maybe<A>, Maybe<B>]): Maybe<[A, B]>
 
-* **Examples:**
+  .all<A, B, C>(maybes: [Maybe<A>, Maybe<B>, Maybe<C>]): Maybe<[A, B, C]>
+
+  .all<A, B, C, D>(
+    maybes: [Maybe<A>, Maybe<B>, Maybe<C, Maybe<D>]
+  ): Maybe<[A, B, C, D]>
+
+  .all<A, B, C, D, E>(
+    maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>, Maybe<E>]
+  ): Maybe<[A, B, C, D, E]>
+  ```
+
+* **Example:**
 
   ```js
   Maybe.all([Maybe.of('foo'), Maybe.of('bar'), Maybe.of('baz')])
@@ -115,4 +129,78 @@ Maybe.fromNullable(persons[3])
     Maybe.of('baz'[2])
   ])
   // => Nothing()
+  ```
+
+### `Maybe` methods
+
+#### `.chain()`
+
+* **Signature:**
+
+  ```ts
+  chain<B>(f: (a: A) => Maybe<B>): Maybe<B>
+  ```
+
+#### `.filter()`
+
+* **Signature:**
+
+  ```ts
+  filter(f: (a: A) => boolean): Maybe<A>
+  ```
+
+#### `.getOrElse()`
+
+* **Signature:**
+
+  ```ts
+  getOrElse(a: A): A
+  ```
+
+#### `.guard()`
+
+* **Signature:**
+
+  ```ts
+  guard<B extends A>(f: (a: A) => a is B): Maybe<B>
+  ```
+
+#### `.isJust()`
+
+* **Signature:**
+
+  ```ts
+  isJust(): boolean
+  ```
+
+#### `.isNothing()`
+
+* **Signature:**
+
+  ```ts
+  isNothing(): boolean
+  ```
+
+#### `.map()`
+
+* **Signature:**
+
+  ```ts
+  map<B>(f: (a: A) => B): Maybe<B>
+  ```
+
+#### `.orElse()`
+
+* **Signature:**
+
+  ```ts
+  orElse(a: Maybe<A>): Maybe<A>
+  ```
+
+#### `.unsafeGet()`
+
+* **Signature:**
+
+  ```ts
+  unsafeGet(): A | void
   ```
