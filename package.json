@@ -18,8 +18,8 @@
     "postdist": "trash ./dist/index.test.{d.ts,js,js.map}",
     "lint": "tslint --fix ./*.ts",
     "lint-production": "tslint ./*.ts",
-    "prettier": "prettier --config ./.prettierrc --write ./*.ts",
-    "prettier-production": "prettier --config ./.prettierrc --list-different ./*.ts",
+    "prettier": "prettier --config ./.prettierrc --write ./*.{md,ts}",
+    "prettier-production": "prettier --config ./.prettierrc --list-different ./*.{md,ts}",
     "test": "tsc && nyc ava"
   },
   "devDependencies": {
