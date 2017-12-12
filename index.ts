@@ -24,11 +24,6 @@ export interface Maybe<A> extends Chain<A>, Foldable<A>, Functor<A> {
 
 class Just<A> implements Maybe<A> {
   /** @internal */
-  static of<A>(value: A) {
-    return new Just(value)
-  }
-
-  /** @internal */
   private readonly value: A
 
   /** @internal */
@@ -41,7 +36,7 @@ class Just<A> implements Maybe<A> {
   }
 
   filter(f: (a: A) => boolean): Maybe<A> {
-    return f(this.value) ? Just.of(this.value) : new Nothing<A>()
+    return f(this.value) ? of(this.value) : new Nothing<A>()
   }
 
   fold<B>(f: (a: A) => B, g: () => B) {
@@ -53,7 +48,7 @@ class Just<A> implements Maybe<A> {
   }
 
   guard<B extends A>(f: (a: A) => a is B): Maybe<B> {
-    return f(this.value) ? Just.of(this.value) : new Nothing<B>()
+    return f(this.value) ? of(this.value) : new Nothing<B>()
   }
 
   isJust() {
@@ -65,11 +60,11 @@ class Just<A> implements Maybe<A> {
   }
 
   map<B>(f: (a: A) => B) {
-    return Just.of(f(this.value))
+    return of(f(this.value))
   }
 
   orElse(a: Maybe<A>) {
-    return Just.of(this.value)
+    return of(this.value)
   }
 
   unsafeGet() {
