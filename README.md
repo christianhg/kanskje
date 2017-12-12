@@ -8,11 +8,24 @@
 [![dependencies status](https://david-dm.org/christianhg/kanskje.svg)](https://david-dm.org/christianhg/kanskje)
 [![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
 
-## Usage
+## Introduction
 
-The Maybe represents a wrapper around any value - most commonly values that might be nullable. The wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally omitting the need for conditionals like `if`s. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
+A Maybe represents a wrapper around any value - most commonly values that might be nullable. Having this wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally, thus omitting the need for conditionals like `if`s. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
 
 Even though they can't be constructed individually, the `Maybe` consists of two classes: `Just` and `Nothing`. The `Maybe` is a `Just` if it holds a value and a `Nothing` if it doesn't.
+
+```js
+Maybe.fromNullable(['foo', 'bar', 'baz'][2]) // Just('baz')
+  .map(x => x.toUpperCase()) // Just('BAZ')
+
+Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing()
+  .map(x => x.toUpperCase()) // Nothing()
+```
+
+There exists a number of great resources on Maybe monads - including
+[The Marvellously Mysterious JavaScript Maybe Monad](https://jrsinclair.com/articles/2016/marvellously-mysterious-javascript-maybe-monad/) by [@jrsinclair](https://twitter.com/jrsinclair) and [Professor Frisby's Mostly Adequate Guide to Function Programming](https://github.com/MostlyAdequate/mostly-adequate-guide/blob/master/ch8.md#schr%C3%B6dingers-maybe) by [@drboolean](https://twitter.com/drboolean) - that one might want to get familiar with. If you are used to Promises, you are essentially already familiar with monads.
+
+## Usage
 
 ```js
 import * as Maybe from 'kanskje'
@@ -45,6 +58,17 @@ Maybe.fromNullable(persons[3])
   .filter(compose(isEven, length))
 // => Nothing()
 ```
+
+## Why kanskje?
+
+Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The source code is purposely kept simple with one-line methods and no method aliases. Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any `f: (a: A) => B` function to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
+
+```js
+Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
+  .map(person => person.age) // Just(undefined)
+```
+
+Simplicity over convenience.
 
 ## API
 
