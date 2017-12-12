@@ -14,9 +14,10 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "dist": "trash dist && npm run lint && npm run prettier-production && npm run test && tsc",
+    "dist": "trash dist && npm run lint-production && npm run prettier-production && npm run test && tsc",
     "postdist": "trash ./dist/index.test.{d.ts,js,js.map}",
     "lint": "tslint --fix ./*.ts",
+    "lint-production": "tslint ./*.ts",
     "prettier": "prettier --config ./.prettierrc --write ./*.ts",
     "prettier-production": "prettier --config ./.prettierrc --list-different ./*.ts",
     "test": "tsc && nyc ava"
