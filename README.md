@@ -17,7 +17,15 @@
 
 ## Introduction
 
-A Maybe represents a wrapper around any value - most commonly values that might be nullable. Having this wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally, thus omitting the need for conditionals like `if`s. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
+A Maybe represents a wrapper around any value - most commonly values that might be nullable. Having this wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally, thus allowing one to write simpler code with fewer conditionals. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
+
+```js
+Maybe.fromNullable(getValueThatMightNotBeThere())
+  .map(doSomething)
+  .map(doAnotherThing)
+  .map(doFinalThing)
+  .getOrElse(defaultValue)
+```
 
 Even though they can't be constructed individually, the `Maybe` consists of two classes: `Just` and `Nothing`. The `Maybe` is a `Just` if it holds a value and a `Nothing` if it doesn't.
 
@@ -27,7 +35,7 @@ const toUpper = a => a.toUpperCase()
 Maybe.fromNullable(['foo', 'bar', 'baz'][2]) // Just('baz')
   .map(toUpper) // Just('BAZ')
 
-Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing()
+Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing
   .map(toUpper) // Nothing
 ```
 
@@ -79,6 +87,19 @@ const unsafeProp = b => a => a[b]
 
 Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
   .map(unsafeProp('age')) // Just(undefined)
+  .getOrElse(25)
+// => undefined
+```
+
+If `Just(undefined)` is not the desired outcome, the mapper function, `f`, needs to return a `Maybe` and be passed to `.chain()` instead:
+
+```js
+const safeProp = b => a => Maybe.fromNullable(a[b])
+
+Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
+  .chain(safeProp('age')) // Nothing
+  .getOrElse(25)
+// => 25
 ```
 
 Simplicity over convenience.
