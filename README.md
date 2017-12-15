@@ -8,6 +8,13 @@
 [![dependencies status](https://david-dm.org/christianhg/kanskje.svg)](https://david-dm.org/christianhg/kanskje)
 [![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
 
+* [Introduction](#introduction)
+* [Usage](#usage)
+* [Why Kanskje?](#why-kanskje)
+* [API](#api)
+  * [Core API](#core-api)
+  * [`Maybe` methods](#maybe-methods)
+
 ## Introduction
 
 A Maybe represents a wrapper around any value - most commonly values that might be nullable. Having this wrapper is useful because it guards against `null` and `undefined` when doing computations on the value. The idea is that the Maybe deals with nullables internally, thus omitting the need for conditionals like `if`s. Not until the very end when it's needed to unwrap the value again, is it necessary to deal with the fact that it was or somehow became nullable.
@@ -15,11 +22,13 @@ A Maybe represents a wrapper around any value - most commonly values that might 
 Even though they can't be constructed individually, the `Maybe` consists of two classes: `Just` and `Nothing`. The `Maybe` is a `Just` if it holds a value and a `Nothing` if it doesn't.
 
 ```js
+const toUpper = a => a.toUpperCase()
+
 Maybe.fromNullable(['foo', 'bar', 'baz'][2]) // Just('baz')
-  .map(x => x.toUpperCase()) // Just('BAZ')
+  .map(toUpper) // Just('BAZ')
 
 Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing()
-  .map(x => x.toUpperCase()) // Nothing()
+  .map(toUpper) // Nothing
 ```
 
 There exists a number of great resources on Maybe monads - including
@@ -56,7 +65,7 @@ Maybe.fromNullable(persons[2])
 Maybe.fromNullable(persons[3])
   .chain(safeProp('name'))
   .filter(compose(isEven, length))
-// => Nothing()
+// => Nothing
 ```
 
 ## Why kanskje?
@@ -66,8 +75,10 @@ Kanskje stems from the need of a simple Maybe monad with type declarations makin
 The source code is purposely kept simple with one-line methods and no method aliases. Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any `f: (a: A) => B` function to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
 
 ```js
+const unsafeProp = b => a => a[b]
+
 Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
-  .map(person => person.age) // Just(undefined)
+  .map(unsafeProp('age')) // Just(undefined)
 ```
 
 Simplicity over convenience.
@@ -76,7 +87,13 @@ Simplicity over convenience.
 
 ### Core API
 
+* [of()](#of)
+* [fromNullable()](#fromNullable)
+* [all()](#all)
+
 #### `of()`
+
+Lifts a value into a `Maybe`, more specifically: a `Just`.
 
 * **Signature:**
 
@@ -98,6 +115,8 @@ Simplicity over convenience.
 
 #### `fromNullable()`
 
+Lifts a value into a `Maybe` but checks if the value is either `null` or `undefined`. If that is a case, a `Nothing` is returned. Otherwise a `Just` is returned.
+
 * **Signature:**
 
   ```ts
@@ -113,10 +132,12 @@ Simplicity over convenience.
 
   ```js
   Maybe.fromNullable(['foo', 'bar', 'baz'][3])
-  // => Nothing()
+  // => Nothing
   ```
 
 #### `.all()`
+
+Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the Maybes were `Just`s, the resulting `Maybe` will be a `Just` containing their values. If any of the Maybes where a `Nothing`, the resulting `Maybe` will be a `Nothing`.
 
 * **Signature:**
 
@@ -154,12 +175,25 @@ Simplicity over convenience.
     Maybe.fromNullable('bar'[3]),
     Maybe.of('baz'[2])
   ])
-  // => Nothing()
+  // => Nothing
   ```
 
 ### `Maybe` methods
 
+* [.chain()](#chain)
+* [.filter()](#filter)
+* [.fold()](#fold)
+* [.getOrElse()](#getOrElse)
+* [.guard()](#guard)
+* [.isJust()](#isJust)
+* [.isNothing()](#isNothing)
+* [.map()](#map)
+* [.orElse()](#orElse)
+* [.unsafeGet()](#unsafeGet)
+
 #### `.chain()`
+
+Accepts a mapper function, f, that returns a `Maybe` and automatically unwraps the outer `Maybe` to not end up with a `Maybe<Maybe<B>>`.
 
 * **Signature:**
 
@@ -167,7 +201,21 @@ Simplicity over convenience.
   chain<B>(f: (a: A) => Maybe<B>): Maybe<B>
   ```
 
+* **Example:**
+
+  ```js
+  const safeHead = xs => Maybe.fromNullable(xs[0])
+
+  Maybe.of([1, 2, 3]).chain(safeHead)
+  // => Just(1)
+
+  Maybe.of([]).chain(safeHead)
+  // => Nothing
+  ```
+
 #### `.filter()`
+
+Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
 
 * **Signature:**
 
@@ -175,7 +223,17 @@ Simplicity over convenience.
   filter(f: (a: A) => boolean): Maybe<A>
   ```
 
+#### `.fold()`
+
+* **Signature:**
+
+  ```ts
+  fold<B>(f: (a: A) => B, g: () => B): B
+  ```
+
 #### `.getOrElse()`
+
+Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Otherwise the value of the `Just` is returned.
 
 * **Signature:**
 
@@ -185,6 +243,8 @@ Simplicity over convenience.
 
 #### `.guard()`
 
+Accepts a TypeScript [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html), `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
+
 * **Signature:**
 
   ```ts
@@ -192,6 +252,8 @@ Simplicity over convenience.
   ```
 
 #### `.isJust()`
+
+Returns `true` if the `Maybe` is a `Just` and `false` if it's a `Nothing`.
 
 * **Signature:**
 
@@ -201,6 +263,8 @@ Simplicity over convenience.
 
 #### `.isNothing()`
 
+Returns `true` if the `Maybe` is a `Nothing` and `false` if it's a `Just`.
+
 * **Signature:**
 
   ```ts
@@ -209,10 +273,31 @@ Simplicity over convenience.
 
 #### `.map()`
 
+Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If `f` returns a `Maybe`, the result will be a nested `Maybe`.
+
 * **Signature:**
 
   ```ts
   map<B>(f: (a: A) => B): Maybe<B>
+  ```
+
+* **Example:**
+
+  ```js
+  const length = a => a.length
+
+  Maybe.of('foo').map(length)
+  // => Just(3)
+  ```
+
+  ```js
+  const safeHead = xs => Maybe.fromNullable(xs[0])
+
+  Maybe.of([1, 2, 3]).map(safeHead)
+  // => Just(Just(1))
+
+  Maybe.of([]).chain(safeHead)
+  // => Just(Nothing)
   ```
 
 #### `.orElse()`
