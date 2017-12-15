@@ -1,6 +1,6 @@
 # kanskje
 
-> Simplistic Maybe monad written in TypeScript
+> Simple Maybe monad written in TypeScript
 
 [![npm module](https://badge.fury.io/js/kanskje.svg)](https://www.npmjs.org/package/kanskje)
 [![Coverage status](https://codecov.io/gh/christianhg/kanskje/branch/master/graph/badge.svg)](https://codecov.io/gh/christianhg/kanskje)
@@ -61,7 +61,9 @@ Maybe.fromNullable(persons[3])
 
 ## Why kanskje?
 
-Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The source code is purposely kept simple with one-line methods and no method aliases. Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any `f: (a: A) => B` function to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
+Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The fact that the Maybe is written in TypeScript makes sure that it only contains methods that are actually possible to express using the TypeScript type system.
+
+The source code is purposely kept simple with one-line methods and no method aliases. Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any `f: (a: A) => B` function to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
 
 ```js
 Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
