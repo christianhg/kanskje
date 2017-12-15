@@ -9,7 +9,6 @@
 [![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
 
 * [Introduction](#introduction)
-* [Usage](#usage)
 * [Why Kanskje?](#why-kanskje)
 * [API](#api)
   * [Core API](#core-api)
@@ -42,40 +41,6 @@ Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing
 There exists a number of great resources on Maybe monads - including
 [The Marvellously Mysterious JavaScript Maybe Monad](https://jrsinclair.com/articles/2016/marvellously-mysterious-javascript-maybe-monad/) by [@jrsinclair](https://twitter.com/jrsinclair) and [Professor Frisby's Mostly Adequate Guide to Function Programming](https://github.com/MostlyAdequate/mostly-adequate-guide/blob/master/ch8.md#schr%C3%B6dingers-maybe) by [@drboolean](https://twitter.com/drboolean) - that one might want to get familiar with. If you are used to Promises, you are essentially already familiar with monads.
 
-## Usage
-
-```js
-import * as Maybe from 'kanskje'
-
-const persons = [
-  {
-    name: 'Alice'
-  },
-  {
-    age: 30
-  },
-  {
-    age: 42,
-    name: 'Carl'
-  }
-]
-
-const compose = g => f => a => g(f(a))
-const isEven = a => a % 2 === 0
-const length = a => a.length
-const safeProp = b => a => Maybe.fromNullable(a[b])
-
-Maybe.fromNullable(persons[2])
-  .chain(safeProp('name'))
-  .filter(compose(isEven, length))
-// => Just('Carl')
-
-Maybe.fromNullable(persons[3])
-  .chain(safeProp('name'))
-  .filter(compose(isEven, length))
-// => Nothing
-```
-
 ## Why kanskje?
 
 Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The fact that the Maybe is written in TypeScript makes sure that it only contains methods that are actually possible to express using the TypeScript type system.
@@ -101,8 +66,6 @@ Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
   .getOrElse(25)
 // => 25
 ```
-
-Simplicity over convenience.
 
 ## API
 
