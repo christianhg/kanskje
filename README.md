@@ -87,9 +87,9 @@ Simplicity over convenience.
 
 ### Core API
 
-* [of()](#of)
-* [fromNullable()](#fromNullable)
-* [all()](#all)
+* [`of()`](#of)
+* [`fromNullable()`](#fromNullable)
+* [`all()`](#all)
 
 #### `of()`
 
@@ -180,16 +180,16 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
 
 ### `Maybe` methods
 
-* [.chain()](#chain)
-* [.filter()](#filter)
-* [.fold()](#fold)
-* [.getOrElse()](#getOrElse)
-* [.guard()](#guard)
-* [.isJust()](#isJust)
-* [.isNothing()](#isNothing)
-* [.map()](#map)
-* [.orElse()](#orElse)
-* [.unsafeGet()](#unsafeGet)
+* [`.chain()`](#chain)
+* [`.filter()`](#filter)
+* [`.fold()`](#fold)
+* [`.getOrElse()`](#getOrElse)
+* [`.guard()`](#guard)
+* [`.isJust()`](#isJust)
+* [`.isNothing()`](#isNothing)
+* [`.map()`](#map)
+* [`.orElse()`](#orElse)
+* [`.unsafeGet()`](#unsafeGet)
 
 #### `.chain()`
 
