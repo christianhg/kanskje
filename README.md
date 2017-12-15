@@ -128,7 +128,7 @@ Simplicity over convenience.
   .all<A, B, C>(maybes: [Maybe<A>, Maybe<B>, Maybe<C>]): Maybe<[A, B, C]>
 
   .all<A, B, C, D>(
-    maybes: [Maybe<A>, Maybe<B>, Maybe<C, Maybe<D>]
+    maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>]
   ): Maybe<[A, B, C, D]>
 
   .all<A, B, C, D, E>(
