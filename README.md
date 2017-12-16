@@ -14,7 +14,7 @@
 ## Table of Contents
 
 * [Introduction](#introduction)
-* [Why Kanskje?](#why-kanskje)
+* [Why kanskje?](#why-kanskje)
 * [Usage](#usage)
 * [API](#api)
   * [Constructing `Maybe`s](#constructing-maybes)
@@ -53,7 +53,7 @@ There exists a number of great resources on Maybe monads - including
 
 ## Why kanskje?
 
-Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The fact that the Maybe is written in TypeScript makes sure that it only contains methods that are actually possible to express using the TypeScript type system.
+kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The fact that the Maybe is written in TypeScript makes sure that it only contains methods that are actually possible to express using the TypeScript type system.
 
 The source code is simple with one-line functions and no aliases, and yet the function declarations - using [Generic Types](https://www.typescriptlang.org/docs/handbook/generics.html) of TypeScript - should be self-documenting.
 
