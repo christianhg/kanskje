@@ -8,6 +8,8 @@
 [![dependencies status](https://david-dm.org/christianhg/kanskje.svg)](https://david-dm.org/christianhg/kanskje)
 [![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
 
+![Set your code free](gaustatoppen.jpg)
+
 * [Introduction](#introduction)
 * [Why Kanskje?](#why-kanskje)
 * [Usage](#usage)
