@@ -83,12 +83,20 @@ This is a CommonJS module.
 Import the exported functions as named imports:
 
 ```js
-import { all, fromNullable, of } from 'kanskje'
+const { all, fromNullable, of } = require('kanskje')
 ```
 
 Or namespace them all under e.g. `Maybe`:
 
 ```js
+const Maybe = require('kanskje')
+```
+
+Or use ES2015 module syntax if your environment supports that:
+
+```js
+import { all, fromNullable, of } from 'kanskje'
+
 import * as Maybe from 'kanskje'
 ```
 
