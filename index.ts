@@ -1,18 +1,7 @@
-export interface Chain<A> {
-  chain<B>(f: (a: A) => Chain<B>): Chain<B>
-}
-
-export interface Foldable<A> {
-  fold<B>(f: (a: A) => B, g: () => B): B
-}
-
-export interface Functor<A> {
-  map<B>(f: (a: A) => B): Functor<B>
-}
-
-export interface Maybe<A> extends Chain<A>, Foldable<A>, Functor<A> {
+export interface Maybe<A> {
   chain<B>(f: (a: A) => Maybe<B>): Maybe<B>
   filter(f: (a: A) => boolean): Maybe<A>
+  fold<B>(f: (a: A) => B, g: () => B): B
   getOrElse(a: A): A
   guard<B extends A>(f: (a: A) => a is B): Maybe<B>
   isJust(): boolean
