@@ -258,7 +258,7 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
 
 #### `fold`
 
-Accepts two functions: a mapper function, `f`, and function with the same return type, `g`. If the `Maybe` is a `Just` its value is mapped and returned using `f`, if it's a `Nothing` the result of `g` is returned.
+Accepts two functions: a mapper function, `f`, and a function with the same return type, `g`. If the `Maybe` is a `Just` its value is mapped and returned using `f`. If it's a `Nothing` the result of `g` is returned.
 
 * **Signature:**
 
@@ -400,7 +400,7 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
   Maybe.of([1, 2, 3]).map(safeHead)
   // => Just(Just(1))
 
-  Maybe.of([]).chain(safeHead)
+  Maybe.of([]).map(safeHead)
   // => Just(Nothing)
   ```
 
