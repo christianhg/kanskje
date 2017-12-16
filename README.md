@@ -2,12 +2,12 @@
 
 > Simple Maybe monad written in TypeScript
 
-[![npm module](https://badge.fury.io/js/kanskje.svg)](https://www.npmjs.org/package/kanskje)
-[![Coverage status](https://codecov.io/gh/christianhg/kanskje/branch/master/graph/badge.svg)](https://codecov.io/gh/christianhg/kanskje)
-[![Build status](https://travis-ci.org/christianhg/kanskje.svg?branch=master)](https://travis-ci.org/christianhg/kanskje)
-[![dependencies status](https://david-dm.org/christianhg/kanskje.svg)](https://david-dm.org/christianhg/kanskje)
-[![devDependencies status](https://david-dm.org/christianhg/kanskje/dev-status.svg)](https://david-dm.org/christianhg/kanskje?type=dev)
-[![Code style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![npm module](https://img.shields.io/npm/v/kanskje.svg?style=flat-square)](https://www.npmjs.org/package/kanskje)
+[![Coverage status](https://img.shields.io/codecov/c/github/christianhg/kanskje.svg?style=flat-square)](https://codecov.io/gh/christianhg/kanskje)
+[![Build status](https://img.shields.io/travis/christianhg/kanskje.svg?style=flat-square)](https://travis-ci.org/christianhg/kanskje)
+[![dependencies status](https://img.shields.io/david/christianhg/kanskje.svg?style=flat-square)](https://david-dm.org/christianhg/kanskje)
+[![devDependencies status](https://img.shields.io/david/dev/christianhg/kanskje.svg?style=flat-square)](https://david-dm.org/christianhg/kanskje?type=dev)
+[![Code style: Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ![Set your code free](gaustatoppen.jpg)
 
