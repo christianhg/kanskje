@@ -11,6 +11,8 @@
 
 ![Set your code free](gaustatoppen.jpg)
 
+## Table of Contents
+
 * [Introduction](#introduction)
 * [Why Kanskje?](#why-kanskje)
 * [Usage](#usage)
