@@ -76,6 +76,8 @@ Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
 
 ## Usage
 
+This is a CommonJS module.
+
 Import the exported functions as named imports:
 
 ```js
@@ -232,7 +234,21 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
   filter(f: (a: A) => boolean): Maybe<A>
   ```
 
+* **Example:**
+
+  ```js
+  const isEven = a => a % 2 === 0
+
+  Maybe.of(4).filter(isEven)
+  // => Just(4)
+
+  Maybe.of(7).filter(isEven)
+  // => Nothing
+  ```
+
 #### `fold`
+
+Accepts two functions: a mapper function, `f`, and function with the same return type, `g`. If the `Maybe` is a `Just` its value is mapped and returned using `f`, if it's a `Nothing` the result of `g` is returned.
 
 * **Signature:**
 
@@ -277,14 +293,56 @@ Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Ot
   getOrElse(a: A): A
   ```
 
+* **Example:**
+
+  ```js
+  Maybe.fromNullable(getPortFromProcess()).getOrElse(3000)
+  ```
+
 #### `guard`
 
 Accepts a TypeScript [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html), `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
+
+Note: Using JavaScript this effectively does the same as `filter`.
 
 * **Signature:**
 
   ```ts
   guard<B extends A>(f: (a: A) => a is B): Maybe<B>
+  ```
+
+* **Example:**
+
+  ```ts
+  interface Admin extends Person {
+    password: string
+  }
+
+  interface Person {
+    name: string
+  }
+
+  function isAdmin(a: Person): a is Admin {
+    return a.hasOwnProperty('password')
+  }
+
+  const carl: Admin = {
+    name: 'Carl',
+    password: '1234'
+  }
+
+  const persons: Person[] = [
+    {
+      name: 'Alice'
+    },
+    carl
+  ]
+
+  Maybe.fromNullable(persons[0]).guard(isAdmin)
+  // => Nothing
+
+  Maybe.fromNullable(persons[1]).guard(isAdmin)
+  // => Just({ name: 'Carl', password: '1234' })
   ```
 
 #### `isJust`
@@ -338,16 +396,52 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
 
 #### `orElse`
 
+Accepts a `Maybe`, `a`. If the instance `Maybe` is a `Nothing` it is replaced with `a`. Otherwise it is left unchanged.
+
 * **Signature:**
 
   ```ts
   orElse(a: Maybe<A>): Maybe<A>
   ```
 
+* **Example:**
+
+  ```js
+  const persons = [
+    {
+      name: 'Alice'
+    },
+    {
+      name: 'Bob'
+    }
+  ]
+
+  Maybe.fromNullable(persons[1]).orElse(Maybe.of({ name: 'Carl' }))
+  // => Just('Bob')
+
+  Maybe.fromNullable(persons[2]).orElse(Maybe.of({ name: 'Carl' }))
+  // => Just('Carl')
+  ```
+
 #### `unsafeGet`
+
+Unsafely unwraps the value from the `Maybe`. Since `Nothing`s don't contain a value, the function will throw an error if the `Maybe` happened to be a `Nothing`.
 
 * **Signature:**
 
   ```ts
   unsafeGet(): A | void
+  ```
+
+* **Example:**
+
+  ```js
+  Maybe.fromNullable(5).unsafeGet()
+  // => 5
+
+  Maybe.of(undefined).unsafeGet()
+  // => undefined
+
+  Maybe.fromNullable(undefined).unsafeGet()
+  // => TypeError: A Nothing holds no value.
   ```
