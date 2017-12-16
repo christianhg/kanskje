@@ -54,7 +54,7 @@ Kanskje stems from the need of a simple Maybe monad with type declarations makin
 
 The source code is simple with one-line functions and no aliases, and yet the function declarations - using [Generic Types](https://www.typescriptlang.org/docs/handbook/generics.html) of TypeScript - should be self-documenting.
 
-Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any mapper function, `f: (a: A) => B`, to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
+Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any mapper function, `f: (a: A) => B`, to `map` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
 
 ```js
 const unsafeProp = b => a => a[b]
@@ -65,7 +65,7 @@ Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
 // => undefined
 ```
 
-If `Just(undefined)` is not the desired outcome, the mapper function, `f`, needs to return a `Maybe` and be passed to `.chain()` instead:
+If `Just(undefined)` is not the desired outcome, the mapper function, `f`, needs to return a `Maybe` and be passed to `chain` instead:
 
 ```js
 const safeProp = b => a => Maybe.fromNullable(a[b])
