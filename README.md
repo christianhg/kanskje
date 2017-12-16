@@ -10,8 +10,9 @@
 
 * [Introduction](#introduction)
 * [Why Kanskje?](#why-kanskje)
+* [Usage](#usage)
 * [API](#api)
-  * [Core API](#core-api)
+  * [Constructing `Maybe`s](#constructing-maybes)
   * [`Maybe` methods](#maybe-methods)
 
 ## Introduction
@@ -33,9 +34,13 @@ const toUpper = a => a.toUpperCase()
 
 Maybe.fromNullable(['foo', 'bar', 'baz'][2]) // Just('baz')
   .map(toUpper) // Just('BAZ')
+  .getOrElse('No value here')
+// => 'BAZ'
 
 Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing
   .map(toUpper) // Nothing
+  .getOrElse('No value here')
+// => 'No value here'
 ```
 
 There exists a number of great resources on Maybe monads - including
@@ -45,7 +50,9 @@ There exists a number of great resources on Maybe monads - including
 
 Kanskje stems from the need of a simple Maybe monad with type declarations making it usable for both JavaScript and TypeScript. The fact that the Maybe is written in TypeScript makes sure that it only contains methods that are actually possible to express using the TypeScript type system.
 
-The source code is purposely kept simple with one-line methods and no method aliases. Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any `f: (a: A) => B` function to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
+The source code is simple with one-line functions and no aliases, and yet the function declarations - using [Generic Types](https://www.typescriptlang.org/docs/handbook/generics.html) of TypeScript - should be self-documenting.
+
+Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any mapper function, `f: (a: A) => B`, to `.map()` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
 
 ```js
 const unsafeProp = b => a => a[b]
@@ -67,15 +74,31 @@ Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
 // => 25
 ```
 
+## Usage
+
+Import the exported functions as named imports:
+
+```js
+import { all, fromNullable, of } from 'kanskje'
+```
+
+Or namespace them all under e.g. `Maybe`:
+
+```js
+import * as Maybe from 'kanskje'
+```
+
 ## API
 
-### Core API
+### Constructing `Maybe`s
 
-* [`of()`](#of)
-* [`fromNullable()`](#fromNullable)
-* [`all()`](#all)
+To construct a `Maybe` one of the following functions can be used:
 
-#### `of()`
+* [`of`](#of)
+* [`fromNullable`](#fromNullable)
+* [`all`](#all)
+
+#### `of`
 
 Lifts a value into a `Maybe`, more specifically: a `Just`.
 
@@ -97,7 +120,7 @@ Lifts a value into a `Maybe`, more specifically: a `Just`.
   // => Just(undefined)
   ```
 
-#### `fromNullable()`
+#### `fromNullable`
 
 Lifts a value into a `Maybe` but checks if the value is either `null` or `undefined`. If that is a case, a `Nothing` is returned. Otherwise a `Just` is returned.
 
@@ -119,24 +142,24 @@ Lifts a value into a `Maybe` but checks if the value is either `null` or `undefi
   // => Nothing
   ```
 
-#### `.all()`
+#### `all`
 
-Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the Maybes were `Just`s, the resulting `Maybe` will be a `Just` containing their values. If any of the Maybes where a `Nothing`, the resulting `Maybe` will be a `Nothing`.
+Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the Maybes were `Just`s, the resulting `Maybe` will be a `Just` containing their values. If any of the `Maybe`s where a `Nothing`, the resulting `Maybe` will be a `Nothing`.
 
 * **Signature:**
 
   ```ts
-  .all<A>(maybes: Maybe<A>[]): Maybe<A[]>
+  all<A>(maybes: Maybe<A>[]): Maybe<A[]>
 
-  .all<A, B>(maybes: [Maybe<A>, Maybe<B>]): Maybe<[A, B]>
+  all<A, B>(maybes: [Maybe<A>, Maybe<B>]): Maybe<[A, B]>
 
-  .all<A, B, C>(maybes: [Maybe<A>, Maybe<B>, Maybe<C>]): Maybe<[A, B, C]>
+  all<A, B, C>(maybes: [Maybe<A>, Maybe<B>, Maybe<C>]): Maybe<[A, B, C]>
 
-  .all<A, B, C, D>(
+  all<A, B, C, D>(
     maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>]
   ): Maybe<[A, B, C, D]>
 
-  .all<A, B, C, D, E>(
+  all<A, B, C, D, E>(
     maybes: [Maybe<A>, Maybe<B>, Maybe<C>, Maybe<D>, Maybe<E>]
   ): Maybe<[A, B, C, D, E]>
   ```
@@ -164,20 +187,22 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
 
 ### `Maybe` methods
 
-* [`.chain()`](#chain)
-* [`.filter()`](#filter)
-* [`.fold()`](#fold)
-* [`.getOrElse()`](#getOrElse)
-* [`.guard()`](#guard)
-* [`.isJust()`](#isJust)
-* [`.isNothing()`](#isNothing)
-* [`.map()`](#map)
-* [`.orElse()`](#orElse)
-* [`.unsafeGet()`](#unsafeGet)
+Once a `Maybe` is constructed, the following methods are accessible on the instance:
 
-#### `.chain()`
+* [`chain`](#chain)
+* [`filter`](#filter)
+* [`fold`](#fold)
+* [`getOrElse`](#getOrElse)
+* [`guard`](#guard)
+* [`isJust`](#isJust)
+* [`isNothing`](#isNothing)
+* [`map`](#map)
+* [`orElse`](#orElse)
+* [`unsafeGet`](#unsafeGet)
 
-Accepts a mapper function, f, that returns a `Maybe` and automatically unwraps the outer `Maybe` to not end up with a `Maybe<Maybe<B>>`.
+#### `chain`
+
+Accepts a mapper function, `f`, that returns a `Maybe` and automatically unwraps the outer `Maybe` to not end up with a `Maybe<Maybe<B>>`.
 
 * **Signature:**
 
@@ -197,7 +222,7 @@ Accepts a mapper function, f, that returns a `Maybe` and automatically unwraps t
   // => Nothing
   ```
 
-#### `.filter()`
+#### `filter`
 
 Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
 
@@ -207,7 +232,7 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
   filter(f: (a: A) => boolean): Maybe<A>
   ```
 
-#### `.fold()`
+#### `fold`
 
 * **Signature:**
 
@@ -215,7 +240,34 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
   fold<B>(f: (a: A) => B, g: () => B): B
   ```
 
-#### `.getOrElse()`
+* **Example:**
+
+  ```js
+  const unsafeProp = b => a => a[b]
+
+  const persons = [
+    {
+      name: 'Alice'
+    },
+    {
+      name: 'Bob'
+    }
+  ]
+
+  Maybe.fromNullable(persons[1]).fold(
+    unsafeProp('name'),
+    () => 'A person does not exist'
+  )
+  // => 'Bob'
+
+  Maybe.fromNullable(persons[2]).fold(
+    unsafeProp('name'),
+    () => 'A person does not exist'
+  )
+  // => 'A person does not exist'
+  ```
+
+#### `getOrElse`
 
 Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Otherwise the value of the `Just` is returned.
 
@@ -225,7 +277,7 @@ Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Ot
   getOrElse(a: A): A
   ```
 
-#### `.guard()`
+#### `guard`
 
 Accepts a TypeScript [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html), `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
 
@@ -235,7 +287,7 @@ Accepts a TypeScript [Type Guard](https://basarat.gitbooks.io/typescript/docs/ty
   guard<B extends A>(f: (a: A) => a is B): Maybe<B>
   ```
 
-#### `.isJust()`
+#### `isJust`
 
 Returns `true` if the `Maybe` is a `Just` and `false` if it's a `Nothing`.
 
@@ -245,7 +297,7 @@ Returns `true` if the `Maybe` is a `Just` and `false` if it's a `Nothing`.
   isJust(): boolean
   ```
 
-#### `.isNothing()`
+#### `isNothing`
 
 Returns `true` if the `Maybe` is a `Nothing` and `false` if it's a `Just`.
 
@@ -255,7 +307,7 @@ Returns `true` if the `Maybe` is a `Nothing` and `false` if it's a `Just`.
   isNothing(): boolean
   ```
 
-#### `.map()`
+#### `map`
 
 Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If `f` returns a `Maybe`, the result will be a nested `Maybe`.
 
@@ -284,7 +336,7 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
   // => Just(Nothing)
   ```
 
-#### `.orElse()`
+#### `orElse`
 
 * **Signature:**
 
@@ -292,7 +344,7 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
   orElse(a: Maybe<A>): Maybe<A>
   ```
 
-#### `.unsafeGet()`
+#### `unsafeGet`
 
 * **Signature:**
 
