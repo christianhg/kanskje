@@ -1,5 +1,6 @@
 {
   "name": "kanskje",
+  "description": "Simple Maybe monad written in TypeScript",
   "version": "1.0.0",
   "license": "MIT",
   "repository": "christianhg/kanskje",
