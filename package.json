@@ -19,6 +19,7 @@
     "postdist": "trash ./dist/index.test.{d.ts,js,js.map}",
     "lint": "tslint --fix ./*.ts",
     "lint-production": "tslint ./*.ts",
+    "prepare": "npm run dist",
     "prepush": "npm run prettier-production",
     "prettier": "prettier --config ./.prettierrc --write ./*.{md,ts}",
     "prettier-production": "prettier --config ./.prettierrc --list-different ./*.{md,ts}",
