@@ -109,53 +109,10 @@ import * as Maybe from 'kanskje'
 
 To construct a `Maybe` one of the following functions can be used:
 
-* [`of`](#of)
-* [`fromNullable`](#fromNullable)
 * [`all`](#all)
-
-#### `of`
-
-Lifts a value into a `Maybe`, more specifically: a `Just`.
-
-* **Signature:**
-
-  ```ts
-  of<A>(a: A): Maybe<A>
-  ```
-
-* **Example:**
-
-  ```js
-  Maybe.of('foo')
-  // => Just('foo')
-  ```
-
-  ```js
-  Maybe.of(['foo', 'bar', 'baz'][3])
-  // => Just(undefined)
-  ```
-
-#### `fromNullable`
-
-Lifts a value into a `Maybe` but checks if the value is either `null` or `undefined`. If that is a case, a `Nothing` is returned. Otherwise a `Just` is returned.
-
-* **Signature:**
-
-  ```ts
-  fromNullable<A>(a: Nullable<A>): Maybe<A>
-  ```
-
-* **Example:**
-
-  ```js
-  Maybe.fromNullable('foo')
-  // => Just('foo')
-  ```
-
-  ```js
-  Maybe.fromNullable(['foo', 'bar', 'baz'][3])
-  // => Nothing
-  ```
+* [`empty`](#empty)
+* [`fromNullable`](#fromNullable)
+* [`of`](#of)
 
 #### `all`
 
@@ -198,6 +155,67 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
     Maybe.of('baz'[2])
   ])
   // => Nothing
+  ```
+
+#### `empty`
+
+Returns a `Nothing`.
+
+* **Signature:**
+
+  ```ts
+  empty<A>(): Maybe<A>
+  ```
+
+* **Example:**
+
+  ```js
+  Maybe.empty()
+  // => Nothing
+  ```
+
+#### `fromNullable`
+
+Lifts a value into a `Maybe` but checks if the value is either `null` or `undefined`. If that is a case, a `Nothing` is returned. Otherwise a `Just` is returned.
+
+* **Signature:**
+
+  ```ts
+  fromNullable<A>(a: Nullable<A>): Maybe<A>
+  ```
+
+* **Example:**
+
+  ```js
+  Maybe.fromNullable('foo')
+  // => Just('foo')
+  ```
+
+  ```js
+  Maybe.fromNullable(['foo', 'bar', 'baz'][3])
+  // => Nothing
+  ```
+
+#### `of`
+
+Lifts a value into a `Maybe`, more specifically: a `Just`.
+
+* **Signature:**
+
+  ```ts
+  of<A>(a: A): Maybe<A>
+  ```
+
+* **Example:**
+
+  ```js
+  Maybe.of('foo')
+  // => Just('foo')
+  ```
+
+  ```js
+  Maybe.of(['foo', 'bar', 'baz'][3])
+  // => Just(undefined)
   ```
 
 ### `Maybe` methods

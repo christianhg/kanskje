@@ -120,6 +120,10 @@ export function all(maybes: Maybe<any>[]): Maybe<any[]> {
     : new Nothing<any>()
 }
 
+export function empty<A>(): Maybe<A> {
+  return new Nothing<A>()
+}
+
 export function fromNullable<A>(a: Nullable<A>): Maybe<A> {
   return a !== undefined && a !== null ? new Just(a) : new Nothing<A>()
 }

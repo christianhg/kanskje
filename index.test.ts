@@ -108,6 +108,11 @@ test('chain', t => {
   )
 })
 
+test('empty', t => {
+  t.truthy(Maybe.empty().isNothing())
+  t.falsy(Maybe.empty().isJust())
+})
+
 test('filter', t => {
   t.is(
     Maybe.fromNullable(persons[2])
