@@ -23,7 +23,7 @@ class Just<A> implements Maybe<A> {
   }
 
   filter(f: (a: A) => boolean): Maybe<A> {
-    return f(this.value) ? of(this.value) : new Nothing<A>()
+    return f(this.value) ? of(this.value) : empty()
   }
 
   fold<B>(f: (a: A) => B, g: () => B) {
@@ -35,7 +35,7 @@ class Just<A> implements Maybe<A> {
   }
 
   guard<B extends A>(f: (a: A) => a is B): Maybe<B> {
-    return f(this.value) ? of(this.value) : new Nothing<B>()
+    return f(this.value) ? of(this.value) : empty()
   }
 
   isJust() {
@@ -61,11 +61,11 @@ class Just<A> implements Maybe<A> {
 
 class Nothing<A> implements Maybe<A> {
   chain<B>(f: (a: A) => Maybe<B>) {
-    return new Nothing<B>()
+    return empty<B>()
   }
 
   filter(f: (a: A) => boolean) {
-    return new Nothing<A>()
+    return empty<A>()
   }
 
   fold<B>(f: (a: A) => B, g: () => B) {
@@ -77,7 +77,7 @@ class Nothing<A> implements Maybe<A> {
   }
 
   guard<B extends A>(f: (a: A) => a is B) {
-    return new Nothing<B>()
+    return empty<B>()
   }
 
   isJust() {
@@ -89,7 +89,7 @@ class Nothing<A> implements Maybe<A> {
   }
 
   map<B>(f: (a: A) => B) {
-    return new Nothing<B>()
+    return empty<B>()
   }
 
   orElse(a: Maybe<A>) {
@@ -117,7 +117,7 @@ export function all<A, B, C, D, E>(
 export function all(maybes: Maybe<any>[]): Maybe<any[]> {
   return maybes.every(maybe => maybe.isJust())
     ? of(maybes.map(maybe => maybe.unsafeGet()))
-    : new Nothing<any>()
+    : empty()
 }
 
 export function empty<A>(): Maybe<A> {
@@ -125,7 +125,7 @@ export function empty<A>(): Maybe<A> {
 }
 
 export function fromNullable<A>(a: Nullable<A>): Maybe<A> {
-  return a !== undefined && a !== null ? new Just(a) : new Nothing<A>()
+  return a !== undefined && a !== null ? of(a) : empty()
 }
 
 export function of<A>(a: A): Maybe<A> {
