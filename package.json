@@ -14,7 +14,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage": "jest && cat ./coverage/lcov.info | codecov",
     "dist": "trash dist && npm run lint-production && npm run prettier-production && npm run test && tsc",
     "postdist": "trash ./dist/index.test.{d.ts,js,js.map}",
     "lint": "tslint --fix ./*.ts",
@@ -23,15 +23,34 @@
     "prepush": "npm run prettier-production",
     "prettier": "prettier --config ./.prettierrc --write ./*.{md,ts}",
     "prettier-production": "prettier --config ./.prettierrc --list-different ./*.{md,ts}",
-    "test": "tsc && nyc ava"
+    "remove-coverage": "trash coverage",
+    "test": "npm run remove-coverage && jest"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "*.ts"
+    ],
+    "coverageDirectory": "coverage",
+    "mapCoverage": true,
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testEnvironment": "node",
+    "testRegex": ".test.ts$",
+    "transform": {
+      ".ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    }
   },
   "devDependencies": {
-    "ava": "^0.24.0",
+    "@types/jest": "^22.0.0",
     "codecov": "^3.0.0",
     "husky": "^0.14.3",
-    "nyc": "^11.3.0",
+    "jest": "^22.0.4",
     "prettier": "^1.9.1",
     "trash-cli": "^1.4.0",
+    "ts-jest": "^22.0.0",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.6.0",
     "typescript": "^2.6.2"
