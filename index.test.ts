@@ -137,6 +137,27 @@ test('filter', t => {
       .getOrElse('A person does not exist'),
     'A person does not exist'
   )
+
+  t.is(
+    Maybe.fromNullable(persons[2])
+      .filter(isAdmin)
+      .fold(unsafeProp('password'), () => 'A person is not an admin'),
+    '1234'
+  )
+
+  t.is(
+    Maybe.fromNullable(persons[1])
+      .filter(isAdmin)
+      .fold(unsafeProp('password'), () => 'A person is not an admin'),
+    'A person is not an admin'
+  )
+
+  t.is(
+    Maybe.fromNullable(persons[3])
+      .filter(isAdmin)
+      .fold(unsafeProp('password'), () => 'A person does not exist'),
+    'A person does not exist'
+  )
 })
 
 test('fold', t => {
@@ -168,29 +189,6 @@ test('fromNullable', t => {
   t.false(Maybe.fromNullable('foo').isNothing())
 })
 
-test('guard', t => {
-  t.is(
-    Maybe.fromNullable(persons[2])
-      .guard(isAdmin)
-      .fold(unsafeProp('password'), () => 'A person is not an admin'),
-    '1234'
-  )
-
-  t.is(
-    Maybe.fromNullable(persons[1])
-      .guard(isAdmin)
-      .fold(unsafeProp('password'), () => 'A person is not an admin'),
-    'A person is not an admin'
-  )
-
-  t.is(
-    Maybe.fromNullable(persons[3])
-      .guard(isAdmin)
-      .fold(unsafeProp('password'), () => 'A person does not exist'),
-    'A person does not exist'
-  )
-})
-
 test('map', t => {
   t.is(
     Maybe.fromNullable(persons[0])
@@ -218,7 +216,7 @@ test('of', t => {
 test('orElse', t => {
   t.is(
     Maybe.fromNullable(persons[1])
-      .guard(isAdmin)
+      .filter(isAdmin)
       .orElse(Maybe.of({ name: 'Spontaneous Admin', password: 'password' }))
       .fold(unsafeProp('name'), () => 'Should not happen'),
     'Spontaneous Admin'
@@ -226,7 +224,7 @@ test('orElse', t => {
 
   t.is(
     Maybe.fromNullable(persons[2])
-      .guard(isAdmin)
+      .filter(isAdmin)
       .orElse(Maybe.of({ name: 'Spontaneous Admin', password: 'password' }))
       .fold(unsafeProp('name'), () => 'Should not happen'),
     'Carl'

@@ -226,7 +226,6 @@ Once a `Maybe` is constructed, the following methods are accessible on the insta
 * [`filter`](#filter)
 * [`fold`](#fold)
 * [`getOrElse`](#getOrElse)
-* [`guard`](#guard)
 * [`isJust`](#isJust)
 * [`isNothing`](#isNothing)
 * [`map`](#map)
@@ -259,13 +258,18 @@ Accepts a mapper function, `f`, that returns a `Maybe` and automatically unwraps
 
 Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
 
+Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html).
+
 * **Signature:**
 
   ```ts
   filter(f: (a: A) => boolean): Maybe<A>
+  filter<B extends A>(f: (a: A) => a is B): Maybe<B>
   ```
 
-* **Example:**
+* **Examples:**
+
+  Using a predicate function:
 
   ```js
   const isEven = a => a % 2 === 0
@@ -275,6 +279,40 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
 
   Maybe.of(7).filter(isEven)
   // => Nothing
+  ```
+
+  Using a TypeScript Type Guard:
+
+  ```ts
+  interface Admin extends Person {
+    password: string
+  }
+
+  interface Person {
+    name: string
+  }
+
+  function isAdmin(a: Person): a is Admin {
+    return a.hasOwnProperty('password')
+  }
+
+  const carl: Admin = {
+    name: 'Carl',
+    password: '1234'
+  }
+
+  const persons: Person[] = [
+    {
+      name: 'Alice'
+    },
+    carl
+  ]
+
+  Maybe.fromNullable(persons[0]).filter(isAdmin)
+  // => Nothing
+
+  Maybe.fromNullable(persons[1]).filter(isAdmin)
+  // => Just({ name: 'Carl', password: '1234' })
   ```
 
 #### `fold`
@@ -328,52 +366,6 @@ Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Ot
 
   ```js
   Maybe.fromNullable(getPortFromProcess()).getOrElse(3000)
-  ```
-
-#### `guard`
-
-Accepts a TypeScript [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html), `f`, and converts the `Maybe` from a `Just` to a `Nothing` if its value does not adhere. If the `Maybe` is already a `Nothing` it remains a `Nothing`.
-
-Note: Using JavaScript this effectively does the same as `filter`.
-
-* **Signature:**
-
-  ```ts
-  guard<B extends A>(f: (a: A) => a is B): Maybe<B>
-  ```
-
-* **Example:**
-
-  ```ts
-  interface Admin extends Person {
-    password: string
-  }
-
-  interface Person {
-    name: string
-  }
-
-  function isAdmin(a: Person): a is Admin {
-    return a.hasOwnProperty('password')
-  }
-
-  const carl: Admin = {
-    name: 'Carl',
-    password: '1234'
-  }
-
-  const persons: Person[] = [
-    {
-      name: 'Alice'
-    },
-    carl
-  ]
-
-  Maybe.fromNullable(persons[0]).guard(isAdmin)
-  // => Nothing
-
-  Maybe.fromNullable(persons[1]).guard(isAdmin)
-  // => Just({ name: 'Carl', password: '1234' })
   ```
 
 #### `isJust`
