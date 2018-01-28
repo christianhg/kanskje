@@ -86,7 +86,7 @@ This is a CommonJS module.
 Import the exported functions as named imports:
 
 ```js
-const { all, fromNullable, of } = require('kanskje')
+const { all, empty, fromNullable, of } = require('kanskje')
 ```
 
 Or namespace them all under e.g. `Maybe`:
@@ -98,7 +98,7 @@ const Maybe = require('kanskje')
 Or use ES2015 module syntax if your environment supports that:
 
 ```js
-import { all, fromNullable, of } from 'kanskje'
+import { all, empty, fromNullable, of } from 'kanskje'
 
 import * as Maybe from 'kanskje'
 ```
