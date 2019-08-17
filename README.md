@@ -13,12 +13,12 @@
 
 ## Table of Contents
 
-* [Introduction](#introduction)
-* [Why kanskje?](#why-kanskje)
-* [Usage](#usage)
-* [API](#api)
-  * [Constructing `Maybe`s](#constructing-maybes)
-  * [`Maybe` methods](#maybe-methods)
+- [Introduction](#introduction)
+- [Why kanskje?](#why-kanskje)
+- [Usage](#usage)
+- [API](#api)
+  - [Constructing `Maybe`s](#constructing-maybes)
+  - [`Maybe` methods](#maybe-methods)
 
 ## Introduction
 
@@ -109,16 +109,16 @@ import * as Maybe from 'kanskje'
 
 To construct a `Maybe` one of the following functions can be used:
 
-* [`all`](#all)
-* [`empty`](#empty)
-* [`fromNullable`](#fromNullable)
-* [`of`](#of)
+- [`all`](#all)
+- [`empty`](#empty)
+- [`fromNullable`](#fromNullable)
+- [`of`](#of)
 
 #### `all`
 
 Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the Maybes were `Just`s, the resulting `Maybe` will be a `Just` containing their values. If any of the `Maybe`s where a `Nothing`, the resulting `Maybe` will be a `Nothing`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   all<A>(maybes: Maybe<A>[]): Maybe<A[]>
@@ -136,7 +136,7 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
   ): Maybe<[A, B, C, D, E]>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.all([Maybe.of('foo'), Maybe.of('bar'), Maybe.of('baz')])
@@ -161,13 +161,13 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
 
 Returns a `Nothing`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   empty<A>(): Maybe<A>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.empty()
@@ -178,13 +178,13 @@ Returns a `Nothing`.
 
 Lifts a value into a `Maybe` but checks if the value is either `null` or `undefined`. If that is a case, a `Nothing` is returned. Otherwise a `Just` is returned.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   fromNullable<A>(a: Nullable<A>): Maybe<A>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.fromNullable('foo')
@@ -200,13 +200,13 @@ Lifts a value into a `Maybe` but checks if the value is either `null` or `undefi
 
 Lifts a value into a `Maybe`, more specifically: a `Just`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   of<A>(a: A): Maybe<A>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.of('foo')
@@ -222,27 +222,27 @@ Lifts a value into a `Maybe`, more specifically: a `Just`.
 
 Once a `Maybe` is constructed, the following methods are accessible on the instance:
 
-* [`chain`](#chain)
-* [`filter`](#filter)
-* [`fold`](#fold)
-* [`getOrElse`](#getOrElse)
-* [`isJust`](#isJust)
-* [`isNothing`](#isNothing)
-* [`map`](#map)
-* [`orElse`](#orElse)
-* [`unsafeGet`](#unsafeGet)
+- [`chain`](#chain)
+- [`filter`](#filter)
+- [`fold`](#fold)
+- [`getOrElse`](#getOrElse)
+- [`isJust`](#isJust)
+- [`isNothing`](#isNothing)
+- [`map`](#map)
+- [`orElse`](#orElse)
+- [`unsafeGet`](#unsafeGet)
 
 #### `chain`
 
 Accepts a mapper function, `f`, that returns a `Maybe` and automatically unwraps the outer `Maybe` to not end up with a `Maybe<Maybe<B>>`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   chain<B>(f: (a: A) => Maybe<B>): Maybe<B>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   const safeHead = xs => Maybe.fromNullable(xs[0])
@@ -260,14 +260,14 @@ Accepts a predicate function, `f`, and converts the `Maybe` from a `Just` to a `
 
 Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html).
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   filter(f: (a: A) => boolean): Maybe<A>
   filter<B extends A>(f: (a: A) => a is B): Maybe<B>
   ```
 
-* **Examples:**
+- **Examples:**
 
   Using a predicate function:
 
@@ -319,13 +319,13 @@ Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks
 
 Accepts two functions: a mapper function, `f`, and a function with the same return type, `g`. If the `Maybe` is a `Just` its value is mapped and returned using `f`. If it's a `Nothing` the result of `g` is returned.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   fold<B>(f: (a: A) => B, g: () => B): B
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   const unsafeProp = b => a => a[b]
@@ -356,13 +356,13 @@ Accepts two functions: a mapper function, `f`, and a function with the same retu
 
 Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Otherwise the value of the `Just` is returned.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   getOrElse(a: A): A
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.fromNullable(getPortFromProcess()).getOrElse(3000)
@@ -372,7 +372,7 @@ Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Ot
 
 Returns `true` if the `Maybe` is a `Just` and `false` if it's a `Nothing`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   isJust(): boolean
@@ -382,7 +382,7 @@ Returns `true` if the `Maybe` is a `Just` and `false` if it's a `Nothing`.
 
 Returns `true` if the `Maybe` is a `Nothing` and `false` if it's a `Just`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   isNothing(): boolean
@@ -392,13 +392,13 @@ Returns `true` if the `Maybe` is a `Nothing` and `false` if it's a `Just`.
 
 Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If `f` returns a `Maybe`, the result will be a nested `Maybe`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   map<B>(f: (a: A) => B): Maybe<B>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   const length = a => a.length
@@ -421,13 +421,13 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
 
 Accepts a `Maybe`, `a`. If the instance `Maybe` is a `Nothing` it is replaced with `a`. Otherwise it is left unchanged.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   orElse(a: Maybe<A>): Maybe<A>
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   const persons = [
@@ -450,13 +450,13 @@ Accepts a `Maybe`, `a`. If the instance `Maybe` is a `Nothing` it is replaced wi
 
 Unsafely unwraps the value from the `Maybe`. Since `Nothing`s don't contain a value, the function will throw an error if the `Maybe` happened to be a `Nothing`.
 
-* **Signature:**
+- **Signature:**
 
   ```ts
   unsafeGet(): A | void
   ```
 
-* **Example:**
+- **Example:**
 
   ```js
   Maybe.fromNullable(5).unsafeGet()
