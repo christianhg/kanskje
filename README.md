@@ -152,7 +152,7 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
   Maybe.all([
     Maybe.of('foo'[1]),
     Maybe.fromNullable('bar'[3]),
-    Maybe.of('baz'[2])
+    Maybe.of('baz'[2]),
   ]);
   // => Nothing
   ```
@@ -298,14 +298,14 @@ Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks
 
   const carl: Admin = {
     name: 'Carl',
-    password: '1234'
+    password: '1234',
   };
 
   const persons: Person[] = [
     {
-      name: 'Alice'
+      name: 'Alice',
     },
-    carl
+    carl,
   ];
 
   Maybe.fromNullable(persons[0]).filter(isAdmin);
@@ -332,22 +332,22 @@ Accepts two functions: a mapper function, `f`, and a function with the same retu
 
   const persons = [
     {
-      name: 'Alice'
+      name: 'Alice',
     },
     {
-      name: 'Bob'
-    }
+      name: 'Bob',
+    },
   ];
 
   Maybe.fromNullable(persons[1]).fold(
     unsafeProp('name'),
-    () => 'A person does not exist'
+    () => 'A person does not exist',
   );
   // => 'Bob'
 
   Maybe.fromNullable(persons[2]).fold(
     unsafeProp('name'),
-    () => 'A person does not exist'
+    () => 'A person does not exist',
   );
   // => 'A person does not exist'
   ```
@@ -432,11 +432,11 @@ Accepts a `Maybe`, `a`. If the instance `Maybe` is a `Nothing` it is replaced wi
   ```js
   const persons = [
     {
-      name: 'Alice'
+      name: 'Alice',
     },
     {
-      name: 'Bob'
-    }
+      name: 'Bob',
+    },
   ];
 
   Maybe.fromNullable(persons[1]).orElse(Maybe.of({ name: 'Carl' }));
