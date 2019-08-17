@@ -29,22 +29,22 @@ Maybe.fromNullable(getValueThatMightNotBeThere())
   .map(doSomething)
   .map(doAnotherThing)
   .map(doFinalThing)
-  .getOrElse(defaultValue)
+  .getOrElse(defaultValue);
 ```
 
 Even though they can't be constructed individually, the `Maybe` consists of two classes: `Just` and `Nothing`. The `Maybe` is a `Just` if it holds a value and a `Nothing` if it doesn't.
 
 ```js
-const toUpper = a => a.toUpperCase()
+const toUpper = a => a.toUpperCase();
 
 Maybe.fromNullable(['foo', 'bar', 'baz'][2]) // Just('baz')
   .map(toUpper) // Just('BAZ')
-  .getOrElse('No value here')
+  .getOrElse('No value here');
 // => 'BAZ'
 
 Maybe.fromNullable(['foo', 'bar', 'baz'][3]) // Nothing
   .map(toUpper) // Nothing
-  .getOrElse('No value here')
+  .getOrElse('No value here');
 // => 'No value here'
 ```
 
@@ -60,22 +60,22 @@ The source code is simple with one-line functions and no aliases, and yet the fu
 Unlike some Maybe monads, kanskje doesn't perform behind the scenes conversions from `Just` to `Nothing`. As an example you can pass any mapper function, `f: (a: A) => B`, to `map` and be sure that the return type of `f` isn't checked. A `Just` is kept a `Just` even if `f` returns a nullable:
 
 ```js
-const unsafeProp = b => a => a[b]
+const unsafeProp = b => a => a[b];
 
 Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
   .map(unsafeProp('age')) // Just(undefined)
-  .getOrElse(25)
+  .getOrElse(25);
 // => undefined
 ```
 
 If `Just(undefined)` is not the desired outcome, the mapper function, `f`, needs to return a `Maybe` and be passed to `chain` instead:
 
 ```js
-const safeProp = b => a => Maybe.fromNullable(a[b])
+const safeProp = b => a => Maybe.fromNullable(a[b]);
 
 Maybe.of({ name: 'Alice' }) // Just({ name: 'Alice' })
   .chain(safeProp('age')) // Nothing
-  .getOrElse(25)
+  .getOrElse(25);
 // => 25
 ```
 
@@ -86,21 +86,21 @@ This is a CommonJS module.
 Import the exported functions as named imports:
 
 ```js
-const { all, empty, fromNullable, of } = require('kanskje')
+const { all, empty, fromNullable, of } = require('kanskje');
 ```
 
 Or namespace them all under e.g. `Maybe`:
 
 ```js
-const Maybe = require('kanskje')
+const Maybe = require('kanskje');
 ```
 
 Or use ES2015 module syntax if your environment supports that:
 
 ```js
-import { all, empty, fromNullable, of } from 'kanskje'
+import { all, empty, fromNullable, of } from 'kanskje';
 
-import * as Maybe from 'kanskje'
+import * as Maybe from 'kanskje';
 ```
 
 ## API
@@ -139,12 +139,12 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
 - **Example:**
 
   ```js
-  Maybe.all([Maybe.of('foo'), Maybe.of('bar'), Maybe.of('baz')])
+  Maybe.all([Maybe.of('foo'), Maybe.of('bar'), Maybe.of('baz')]);
   // => Just(['foo', 'bar', 'baz'])
   ```
 
   ```js
-  Maybe.all([Maybe.of('foo'[1]), Maybe.of('bar'[3]), Maybe.of('baz'[2])])
+  Maybe.all([Maybe.of('foo'[1]), Maybe.of('bar'[3]), Maybe.of('baz'[2])]);
   // => Just(['o', undefined, 'z'])
   ```
 
@@ -153,7 +153,7 @@ Accepts an array or a tuple of `Maybe`s and returns a single `Maybe`. If all the
     Maybe.of('foo'[1]),
     Maybe.fromNullable('bar'[3]),
     Maybe.of('baz'[2])
-  ])
+  ]);
   // => Nothing
   ```
 
@@ -170,7 +170,7 @@ Returns a `Nothing`.
 - **Example:**
 
   ```js
-  Maybe.empty()
+  Maybe.empty();
   // => Nothing
   ```
 
@@ -187,12 +187,12 @@ Lifts a value into a `Maybe` but checks if the value is either `null` or `undefi
 - **Example:**
 
   ```js
-  Maybe.fromNullable('foo')
+  Maybe.fromNullable('foo');
   // => Just('foo')
   ```
 
   ```js
-  Maybe.fromNullable(['foo', 'bar', 'baz'][3])
+  Maybe.fromNullable(['foo', 'bar', 'baz'][3]);
   // => Nothing
   ```
 
@@ -209,12 +209,12 @@ Lifts a value into a `Maybe`, more specifically: a `Just`.
 - **Example:**
 
   ```js
-  Maybe.of('foo')
+  Maybe.of('foo');
   // => Just('foo')
   ```
 
   ```js
-  Maybe.of(['foo', 'bar', 'baz'][3])
+  Maybe.of(['foo', 'bar', 'baz'][3]);
   // => Just(undefined)
   ```
 
@@ -245,12 +245,12 @@ Accepts a mapper function, `f`, that returns a `Maybe` and automatically unwraps
 - **Example:**
 
   ```js
-  const safeHead = xs => Maybe.fromNullable(xs[0])
+  const safeHead = xs => Maybe.fromNullable(xs[0]);
 
-  Maybe.of([1, 2, 3]).chain(safeHead)
+  Maybe.of([1, 2, 3]).chain(safeHead);
   // => Just(1)
 
-  Maybe.of([]).chain(safeHead)
+  Maybe.of([]).chain(safeHead);
   // => Nothing
   ```
 
@@ -272,12 +272,12 @@ Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks
   Using a predicate function:
 
   ```js
-  const isEven = a => a % 2 === 0
+  const isEven = a => a % 2 === 0;
 
-  Maybe.of(4).filter(isEven)
+  Maybe.of(4).filter(isEven);
   // => Just(4)
 
-  Maybe.of(7).filter(isEven)
+  Maybe.of(7).filter(isEven);
   // => Nothing
   ```
 
@@ -285,33 +285,33 @@ Note: If used with TypeScript `f` can be a [Type Guard](https://basarat.gitbooks
 
   ```ts
   interface Admin extends Person {
-    password: string
+    password: string;
   }
 
   interface Person {
-    name: string
+    name: string;
   }
 
   function isAdmin(a: Person): a is Admin {
-    return a.hasOwnProperty('password')
+    return a.hasOwnProperty('password');
   }
 
   const carl: Admin = {
     name: 'Carl',
     password: '1234'
-  }
+  };
 
   const persons: Person[] = [
     {
       name: 'Alice'
     },
     carl
-  ]
+  ];
 
-  Maybe.fromNullable(persons[0]).filter(isAdmin)
+  Maybe.fromNullable(persons[0]).filter(isAdmin);
   // => Nothing
 
-  Maybe.fromNullable(persons[1]).filter(isAdmin)
+  Maybe.fromNullable(persons[1]).filter(isAdmin);
   // => Just({ name: 'Carl', password: '1234' })
   ```
 
@@ -328,7 +328,7 @@ Accepts two functions: a mapper function, `f`, and a function with the same retu
 - **Example:**
 
   ```js
-  const unsafeProp = b => a => a[b]
+  const unsafeProp = b => a => a[b];
 
   const persons = [
     {
@@ -337,18 +337,18 @@ Accepts two functions: a mapper function, `f`, and a function with the same retu
     {
       name: 'Bob'
     }
-  ]
+  ];
 
   Maybe.fromNullable(persons[1]).fold(
     unsafeProp('name'),
     () => 'A person does not exist'
-  )
+  );
   // => 'Bob'
 
   Maybe.fromNullable(persons[2]).fold(
     unsafeProp('name'),
     () => 'A person does not exist'
-  )
+  );
   // => 'A person does not exist'
   ```
 
@@ -365,7 +365,7 @@ Accepts a default value, `a`, and returns that if the `Maybe` is a `Nothing`. Ot
 - **Example:**
 
   ```js
-  Maybe.fromNullable(getPortFromProcess()).getOrElse(3000)
+  Maybe.fromNullable(getPortFromProcess()).getOrElse(3000);
   ```
 
 #### `isJust`
@@ -401,19 +401,19 @@ Accepts any mapper function, `f`, and applies it to the value of the `Maybe`. If
 - **Example:**
 
   ```js
-  const length = a => a.length
+  const length = a => a.length;
 
-  Maybe.of('foo').map(length)
+  Maybe.of('foo').map(length);
   // => Just(3)
   ```
 
   ```js
-  const safeHead = xs => Maybe.fromNullable(xs[0])
+  const safeHead = xs => Maybe.fromNullable(xs[0]);
 
-  Maybe.of([1, 2, 3]).map(safeHead)
+  Maybe.of([1, 2, 3]).map(safeHead);
   // => Just(Just(1))
 
-  Maybe.of([]).map(safeHead)
+  Maybe.of([]).map(safeHead);
   // => Just(Nothing)
   ```
 
@@ -437,12 +437,12 @@ Accepts a `Maybe`, `a`. If the instance `Maybe` is a `Nothing` it is replaced wi
     {
       name: 'Bob'
     }
-  ]
+  ];
 
-  Maybe.fromNullable(persons[1]).orElse(Maybe.of({ name: 'Carl' }))
+  Maybe.fromNullable(persons[1]).orElse(Maybe.of({ name: 'Carl' }));
   // => Just('Bob')
 
-  Maybe.fromNullable(persons[2]).orElse(Maybe.of({ name: 'Carl' }))
+  Maybe.fromNullable(persons[2]).orElse(Maybe.of({ name: 'Carl' }));
   // => Just('Carl')
   ```
 
@@ -459,12 +459,12 @@ Unsafely unwraps the value from the `Maybe`. Since `Nothing`s don't contain a va
 - **Example:**
 
   ```js
-  Maybe.fromNullable(5).unsafeGet()
+  Maybe.fromNullable(5).unsafeGet();
   // => 5
 
-  Maybe.of(undefined).unsafeGet()
+  Maybe.of(undefined).unsafeGet();
   // => undefined
 
-  Maybe.fromNullable(undefined).unsafeGet()
+  Maybe.fromNullable(undefined).unsafeGet();
   // => TypeError: A Nothing holds no value.
   ```

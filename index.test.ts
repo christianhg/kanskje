@@ -1,41 +1,41 @@
-import * as Maybe from './index'
+import * as Maybe from './index';
 
 function compose<A, B, C>(g: (b: B) => C, f: (a: A) => B) {
-  return (a: A) => g(f(a))
+  return (a: A) => g(f(a));
 }
 
 function isAdmin(a: Person): a is Admin {
-  return a.hasOwnProperty('password')
+  return a.hasOwnProperty('password');
 }
 
-const isEven = (a: number) => a % 2 === 0
+const isEven = (a: number) => a % 2 === 0;
 
-const length = (s: string) => s.length
+const length = (s: string) => s.length;
 
 function safeProp<A, B extends keyof A>(b: B) {
-  return (a: A) => Maybe.fromNullable(a[b])
+  return (a: A) => Maybe.fromNullable(a[b]);
 }
 
-const toUpper = (a: string) => a.toUpperCase()
+const toUpper = (a: string) => a.toUpperCase();
 
 function unsafeProp<A, B extends keyof A>(b: B) {
-  return (a: A) => a[b]
+  return (a: A) => a[b];
 }
 
 interface Admin extends Person {
-  password: string
+  password: string;
 }
 
 interface Person {
-  age?: number
-  name: string
+  age?: number;
+  name: string;
 }
 
 const admin: Admin = {
   age: 42,
   name: 'Carl',
   password: '1234'
-}
+};
 
 const persons: Person[] = [
   {
@@ -46,22 +46,22 @@ const persons: Person[] = [
     name: 'Bob'
   },
   admin
-]
+];
 
 test('all', () => {
-  expect(Maybe.all([Maybe.of('foo'), Maybe.of('bar')]).isJust()).toBeTruthy()
-  expect(Maybe.all([Maybe.of(42), Maybe.of('fizzbuzz')]).isJust()).toBeTruthy()
+  expect(Maybe.all([Maybe.of('foo'), Maybe.of('bar')]).isJust()).toBeTruthy();
+  expect(Maybe.all([Maybe.of(42), Maybe.of('fizzbuzz')]).isJust()).toBeTruthy();
   expect(
     Maybe.all([Maybe.of(true), Maybe.fromNullable(undefined)]).isNothing()
-  ).toBeTruthy()
+  ).toBeTruthy();
   expect(Maybe.all([Maybe.of('foo'), Maybe.of('bar')]).unsafeGet()).toEqual([
     'foo',
     'bar'
-  ])
+  ]);
   expect(Maybe.all([Maybe.of(42), Maybe.of('fizzbuzz')]).unsafeGet()).toEqual([
     42,
     'fizzbuzz'
-  ])
+  ]);
   expect(
     Maybe.all([
       Maybe.fromNullable(persons[0]),
@@ -71,7 +71,7 @@ test('all', () => {
     ])
       .map(persons => persons.map(unsafeProp('name')))
       .isNothing()
-  ).toBeTruthy()
+  ).toBeTruthy();
   expect(
     Maybe.all([
       Maybe.fromNullable(persons[0]),
@@ -81,33 +81,33 @@ test('all', () => {
       persons => persons.map(unsafeProp('name')),
       () => ['random', 'names', 'list']
     )
-  ).toEqual(['Alice', 'Bob', 'Carl'])
-})
+  ).toEqual(['Alice', 'Bob', 'Carl']);
+});
 
 test('chain', () => {
   expect(
     Maybe.fromNullable(persons[0])
       .chain(safeProp('age'))
       .getOrElse(42)
-  ).toBe(42)
+  ).toBe(42);
 
   expect(
     Maybe.fromNullable(persons[1])
       .chain(safeProp('age'))
       .getOrElse(42)
-  ).toBe(30)
+  ).toBe(30);
 
   expect(
     Maybe.fromNullable(persons[3])
       .chain(safeProp('age'))
       .getOrElse(42)
-  ).toBe(42)
-})
+  ).toBe(42);
+});
 
 test('empty', () => {
-  expect(Maybe.empty().isNothing()).toBeTruthy()
-  expect(Maybe.empty().isJust()).toBeFalsy()
-})
+  expect(Maybe.empty().isNothing()).toBeTruthy();
+  expect(Maybe.empty().isJust()).toBeFalsy();
+});
 
 test('filter', () => {
   expect(
@@ -120,7 +120,7 @@ test('filter', () => {
         )
       )
       .getOrElse('A man has no even length name')
-  ).toBe('Carl')
+  ).toBe('Carl');
 
   expect(
     Maybe.fromNullable(persons[0])
@@ -132,7 +132,7 @@ test('filter', () => {
         )
       )
       .getOrElse('A girl has no even length name')
-  ).toBe('A girl has no even length name')
+  ).toBe('A girl has no even length name');
 
   expect(
     Maybe.fromNullable(persons[3])
@@ -144,26 +144,26 @@ test('filter', () => {
         )
       )
       .getOrElse('A person does not exist')
-  ).toBe('A person does not exist')
+  ).toBe('A person does not exist');
 
   expect(
     Maybe.fromNullable(persons[2])
       .filter(isAdmin)
       .fold(unsafeProp('password'), () => 'A person is not an admin')
-  ).toBe('1234')
+  ).toBe('1234');
 
   expect(
     Maybe.fromNullable(persons[1])
       .filter(isAdmin)
       .fold(unsafeProp('password'), () => 'A person is not an admin')
-  ).toBe('A person is not an admin')
+  ).toBe('A person is not an admin');
 
   expect(
     Maybe.fromNullable(persons[3])
       .filter(isAdmin)
       .fold(unsafeProp('password'), () => 'A person does not exist')
-  ).toBe('A person does not exist')
-})
+  ).toBe('A person does not exist');
+});
 
 test('fold', () => {
   expect(
@@ -171,26 +171,26 @@ test('fold', () => {
       unsafeProp('name'),
       () => 'A girl has no name'
     )
-  ).toBe('Alice')
+  ).toBe('Alice');
 
   expect(
     Maybe.fromNullable(persons[3]).fold(
       unsafeProp('name'),
       () => 'A person does not exist'
     )
-  ).toBe('A person does not exist')
-})
+  ).toBe('A person does not exist');
+});
 
 test('fromNullable', () => {
-  expect(Maybe.fromNullable(undefined).isJust()).toBeFalsy()
-  expect(Maybe.fromNullable(undefined).isNothing()).toBeTruthy()
+  expect(Maybe.fromNullable(undefined).isJust()).toBeFalsy();
+  expect(Maybe.fromNullable(undefined).isNothing()).toBeTruthy();
 
-  expect(Maybe.fromNullable(null).isJust()).toBeFalsy()
-  expect(Maybe.fromNullable(null).isNothing()).toBeTruthy()
+  expect(Maybe.fromNullable(null).isJust()).toBeFalsy();
+  expect(Maybe.fromNullable(null).isNothing()).toBeTruthy();
 
-  expect(Maybe.fromNullable('foo').isJust()).toBeTruthy()
-  expect(Maybe.fromNullable('foo').isNothing()).toBeFalsy()
-})
+  expect(Maybe.fromNullable('foo').isJust()).toBeTruthy();
+  expect(Maybe.fromNullable('foo').isNothing()).toBeFalsy();
+});
 
 test('map', () => {
   expect(
@@ -198,21 +198,21 @@ test('map', () => {
       .chain(safeProp('name'))
       .map(toUpper)
       .getOrElse('A girl has no name')
-  ).toBe('ALICE')
+  ).toBe('ALICE');
 
   expect(
     Maybe.fromNullable(persons[3])
       .chain(safeProp('name'))
       .map(toUpper)
       .getOrElse('A person does not exist')
-  ).toBe('A person does not exist')
-})
+  ).toBe('A person does not exist');
+});
 
 test('of', () => {
-  expect(Maybe.of('foo').isJust()).toBeTruthy()
-  expect(Maybe.of(null).isJust()).toBeTruthy()
-  expect(Maybe.of(undefined).isJust()).toBeTruthy()
-})
+  expect(Maybe.of('foo').isJust()).toBeTruthy();
+  expect(Maybe.of(null).isJust()).toBeTruthy();
+  expect(Maybe.of(undefined).isJust()).toBeTruthy();
+});
 
 test('orElse', () => {
   expect(
@@ -220,21 +220,21 @@ test('orElse', () => {
       .filter(isAdmin)
       .orElse(Maybe.of({ name: 'Spontaneous Admin', password: 'password' }))
       .fold(unsafeProp('name'), () => 'Should not happen')
-  ).toBe('Spontaneous Admin')
+  ).toBe('Spontaneous Admin');
 
   expect(
     Maybe.fromNullable(persons[2])
       .filter(isAdmin)
       .orElse(Maybe.of({ name: 'Spontaneous Admin', password: 'password' }))
       .fold(unsafeProp('name'), () => 'Should not happen')
-  ).toBe('Carl')
-})
+  ).toBe('Carl');
+});
 
 test('unsafeGet', () => {
-  expect(Maybe.of(5).unsafeGet()).toBe(5)
-  expect(Maybe.of(undefined).unsafeGet()).toBe(undefined)
-  expect(Maybe.of(null).unsafeGet()).toBe(null)
+  expect(Maybe.of(5).unsafeGet()).toBe(5);
+  expect(Maybe.of(undefined).unsafeGet()).toBe(undefined);
+  expect(Maybe.of(null).unsafeGet()).toBe(null);
 
-  expect(Maybe.fromNullable(null).unsafeGet).toThrow()
-  expect(Maybe.fromNullable(undefined).unsafeGet).toThrow()
-})
+  expect(Maybe.fromNullable(null).unsafeGet).toThrow();
+  expect(Maybe.fromNullable(undefined).unsafeGet).toThrow();
+});
