@@ -20,7 +20,6 @@
     "lint": "tslint --fix ./*.ts",
     "lint-production": "tslint ./*.ts",
     "prepare": "npm run dist",
-    "prepush": "npm run prettier-production",
     "prettier": "prettier --config ./.prettierrc --write ./*.{md,ts}",
     "prettier-production": "prettier --config ./.prettierrc --list-different ./*.{md,ts}",
     "remove-coverage": "trash coverage",
@@ -45,7 +44,6 @@
   "devDependencies": {
     "@types/jest": "^24.0.17",
     "codecov": "^3.5.0",
-    "husky": "^3.0.4",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "trash-cli": "^3.0.0",
